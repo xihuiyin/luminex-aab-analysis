@@ -4,6 +4,9 @@ library(tidyverse)
 library(dplyr)
 library(viridis)
 
+
+#### QC STUFF ####
+
 #import file and create a dataframe from csv file
 r1_mfi <- read.csv("9.25.23 PANS ana cc r1_mfi.csv", stringsAsFactors = F, encoding="UTF-8")
 r1_ct <- read.csv("9.25.23 PANS ana cc r1_ct.csv", stringsAsFactors = F, encoding="UTF-8")
@@ -20,32 +23,37 @@ sample.list <- factor(sample.list, levels = c(sample.list <- c(
 
 #input ag list as a vector
 ag.list <- c(
-  "Bare Bead","IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Lysomonoganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","MIP-1alpha (CCL3)","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP BB'","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
+  "Bare Bead","Anti-Human IgG Fc fragment specific","Anti-Human IgG F(ab') fragment specific","Anti-Human IgG (H+L)","Human IgG from serum","IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Ganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","CCL3","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
 )
 ag.list <- as.factor(ag.list) #converts character vector to factor so that levels can be rearranged
 ag.list <- factor(ag.list, levels = c(
-  "Bare Bead","IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Lysomonoganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","MIP-1alpha (CCL3)","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP BB'","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
+  "Bare Bead","Anti-Human IgG Fc fragment specific","Anti-Human IgG F(ab') fragment specific","Anti-Human IgG (H+L)","Human IgG from serum","IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Ganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","CCL3","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
 ))
 
-#remove "sample column" and set wells as the rownames
-rownames(r1_mfi) <- sample.list
-rownames(r1_ct) <- sample.list
-rownames(r2_mfi) <- sample.list
-rownames(r2_ct) <- sample.list 
 
 ###BEFORE PROCEEDING, CHECK TO MAKE SURE THAT THE DIMS OF ALL OBJECTS (R1_..., R2_...) ARE IDENTICAL
 
-#remove the "sample" column
-r1_mfi <- r1_mfi[,-1]
-r1_ct <- r1_ct[,-1]
-r2_mfi <- r2_mfi[,-1]
-r2_ct <- r2_ct[,-1]
+#pre-processing - set sample names in col 1 to rownames
+preproc <- function(raw) {
+  rownames(raw) <- sample.list
+  raw <- raw[,-1]
+  return(raw)
+}
 
-#index IDs and respective wells that have <25 bt ct
-ct.r1 <- which(r1_ct < 25, arr.ind = T)
-ct.r2 <- which(r2_ct < 25, arr.ind = T)
-r1_ct_list <- split(ct.r1, row(ct.r1)) #store index positions in a list
-r2_ct_list <- split(ct.r2, row(ct.r2))
+r1_mfi <- preproc(r1_mfi)
+r1_ct <- preproc(r1_ct)
+r2_mfi <- preproc(r2_mfi)
+r2_ct <- preproc(r2_ct)
+
+#index IDs and wells w/ <25 bt ct then store in list
+bd.ct.qc <- function(ct) {
+  ct.1 <- which(ct < 25, arr.ind = T) #indexing
+  ct.list <- split(ct.1, row(ct.1)) #store in list
+  return(ct.list)
+}
+
+r1_ct_list <- bd.ct.qc(r1_ct)
+r2_ct_list <- bd.ct.qc(r2_ct)
 
 # to calculate the %CV within IDs for duplicate sera with low bd counts, then index the rep with %CV>20
 ct.combined <- c(r1_ct_list, r2_ct_list) #to visually inspect and remember the row position that begins from r2 (row 59)
@@ -98,166 +106,130 @@ for (i in 1:nrow(combined_lowct)) {
   } 
   
   else if (combined_lowct$cvdec[i] == "REMOVE BOTH") {
-    r1_mfi.1[row_idx, col_idx] <- NA #rep with negative values temporarily, can't do NA here or will run into downstream errors
+    r1_mfi.1[row_idx, col_idx] <- NA 
     r2_mfi.1[row_idx, col_idx] <- NA
     }
 }
 
+# Find the indices of NA values
+na_indices.1 <- which(is.na(r1_mfi.1), arr.ind = TRUE)
+print(na_indices.1)
+na_indices.2 <- which(is.na(r2_mfi.1), arr.ind = TRUE)
+print(na_indices.2)
 
-#define function for calculating %CV
-cvmatrix <- function(matrix1, matrix2) {
-  matrixmean <- (matrix1 + matrix2) / 2
-  sd <- sqrt(((matrix1 - matrixmean)^2 + (matrix2 - matrixmean)^2))
-  percentcv <- sd / matrixmean * 100
-  return(percentcv)
+colnames(r1_mfi.1)[77]
+
+sample.list <- read.csv("UNORDERED.csv", stringsAsFactors = F, encoding="UTF-8") #input desired sample order (ordered by sample grouping & alphabetically)
+sample.list <- as.character(sample.list[, 2])
+cat.list <- read.csv("UNORDERED.csv", stringsAsFactors = F, encoding="UTF-8") #input desired sample order (ordered by sample grouping & alphabetically)
+cat.list <- as.character(cat.list[, 1])
+
+#sample.list <- c(
+#  "126-0004-01","126-0022-01","126-0006-02","126-0057-01","126-0023-02","126-0099-01","126-0032-02","126-0105-01","126-0035-02","126-0115-01","126-0060-01","126-0120-01","126-0063-01","126-0130-01","126-0067-01","126-0154-02","126-0071-02","126-0156-01","126-0080-01","126-0161-02","126-0093-01","77-0001-02","126-0093-04","77-0013-06","126-0097-01","77-0014-01","126-0110-04","77-0014-08","126-0117-01","77-0048-16","126-0147-01","77-0090-02","126-0147-03","77-0091-07","126-0149-01","77-0107-04","126-0165-01","77-0120-02","77-0006-13","77-0120-28","77-0028-09","77-0153-06","77-0039-20","77-0153-11","77-0047-38","77-0157-01","77-0069-03","77-0183-01","77-0071-10","77-0183-81","77-0096-03","77-0185-01","77-0140-02","77-0205-05","77-0146-01","77-0371-02","77-0147-12","77-0206-42","77-0150-02","77-0214-01","77-0160-05","77-0219-45","77-0166-05","77-0226-01","77-0186-01","77-0233-03","77-0196-01","77-0244-01","77-0198-06","77-0268-05","77-0198-36","77-0269-91","77-0227-05","77-0277-01","77-0231-01","77-0280-25","77-0251-03","77-0301-40","77-0251-46","77-0328-58","77-0252-81","77-0343-03","77-0270-01","77-0346-01","77-0275-35","77-0355-02","77-0293-19","77-0363-02","77-0300-01","77-0363-23","77-0353-06","77-0364-02","77-0373-01","77-0397-01","77-0393-01","77-0206-03","77-0393-02","77-0401-01","77-0398-01","77-0403-01","77-0402-01","77-0403-17","77-0419-07","77-0412-01","77-0464-01","77-0445-01","77-0491-01","77-0489-01","77-0499-01","77-1013-01","77-1000-02","111-0012-01","77-1027-01","111-0017-01","111-0013-01","111-0019-01","111-0028-01","111-0039-01","111-0029-01","111-0041-01","111-0047-01","111-0042-02","111-0060-01","111-0069-03","111-0502-01","111-0080-03","111-0506-01","111-0524-01","111-0507-01","111-0547-01","111-0508-01","111-0553-01","111-0532-01","111-0562-01","111-0545-01",
+ # "111-0582-01","111-0552-01","111-0632-01","111-0554-01","111-0641-01","111-0594-01","111-0675-01","111-0653-01","111-0742-01","111-0654-01","111-0751-01","111-0702-01","111-0769-01","111-0710-04","126-0043-01","111-0752-01","126-0077-01","111-0770-01","126-0083-01","126-0001-01","126-0002-01","126-0017-03","126-0005-01","126-0027-02","126-0020-01","126-0029-01","126-0024-01","126-0047-01","126-0030-02","126-0049-01","126-0033-01","126-0053-01","126-0073-01","126-0089-01","126-0085-01","126-0106-01","126-0088-02","126-0113-02","126-0092-01","126-0136-02","126-0108-04","126-0148-01","126-0111-01","126-0152-01","126-0119-01","126-0155-01","126-0172-01","126-0170-01","77-0008-05","77-0007-03","77-0009-01","77-0007-29","77-0032-01","77-0010-01","77-0068-01","77-0010-02","77-0068-11","77-0016-01","77-0092-04","77-0016-06","77-0102-04","77-0019-01","77-0103-04","77-0040-02","77-0127-02","77-0040-09","77-0143-01","77-0041-01","77-0148-03","77-0042-03","77-0148-10","77-0067-37","77-0158-02","77-0076-01","77-0162-02","77-0079-06","77-0171-02","77-0085-04","77-0172-03","77-0095-01","77-0178-02","77-0097-01","77-0178-13","77-0152-06","77-0181-02","77-0155-01","77-0189-01","77-0170-02","77-0193-01","77-0170-18","77-0211-02","77-0207-07","77-0218-01","77-0207-37","77-0218-33","77-0208-01","77-0228-02","77-0208-13","77-0229-03","77-0235-01","77-0237-03","77-0241-07","77-0239-01","77-0241-21","77-0257-78","77-0311-34","77-0261-56","77-0312-24","77-0282-16","77-0317-13","77-0282-31","77-0338-01","77-0286-14","77-0354-01","77-0304-52","77-0362-07","77-0324-32","77-0362-15","77-0324-37","77-0370-05","77-0347-05","77-0390-01","77-0365-01","77-0409-07","77-0365-06","77-0421-01","77-0380-03","77-0422-02","77-0387-01","77-0456-02","77-0391-01","77-0482-01","77-0411-01","77-0483-01","77-1006-01","77-1020-01",
+ # "77-1014-01","111-0002-02","111-0020-01","111-0022-01","111-0023-01","111-0046-02","111-0024-01","111-0504-01","111-0035-01","111-0568-01","111-0038-01","111-0634-02","111-0510-01","111-0636-01","111-0514-01","111-0640-02","111-0515-01","111-0648-02","111-0549-01","111-0652-01","111-0551-01","111-0666-02","111-0580-01","111-0669-01","111-0589-01","111-0684-01","111-0604-01","111-0685-01","111-0608-01","111-0708-01","111-0651-01","111-0728-01","111-0658-01","111-0734-01","111-0703-01","111-0738-01","111-0718-01","111-0740-01","111-0729-01","111-0768-01","111-0745-01","126-0026-01","111-0753-01","HCT","HIS","HTG","HMS","HRN","HAS","HSC","MM","HC123"
+#)
+
+#remove u1bb'
+r1_mfi.2 <- r1_mfi.1[,-77]
+r2_mfi.2  <- r2_mfi.1[,-77]
+
+#pull out samples with < or > 2.5sd for igg beads
+#pull out samples < or > 2.5sd for igg beads
+sd.process <- function(input) {
+  colnames(input) <- ag.list
+  log.mat <- log2(input[ , 2:5]) #change col corresponding to the control beads
+  sd.ag <- apply(log.mat, 2, sd, na.rm=T)
+  ag.mean <- colMeans(log.mat, na.rm=T)
+  num_sd <- 2.5 #can change sd cutoff for stringency
+  above_2.5 <- ag.mean + (sd.ag * num_sd)
+  below_2.5 <- ag.mean - (sd.ag * num_sd)
+  
+  return(list(log.mat = log.mat, above_2.5 = above_2.5, below_2.5 = below_2.5))
 }
 
-cv.mat <- cvmatrix(r1_mfi.1,r2_mfi.1)
+r1.sd <- sd.process(r1_mfi.2)
+r2.sd <- sd.process(r2_mfi.2)
 
-#calculate avg %CV of everything in the matrix
-avgcv <- mean(cv.mat, na.rm = TRUE)
-print(avgcv)
-#21.6%
+sd.igg <- function(matrix, sdvals.abv, sdvals.bel) {
+  all.names.abv <- list()
+  all.names.bel <- list()
+  for (i in 1:length(sdvals.abv)) {
+    names.sd.abv <- rownames(matrix[matrix[, i] > sdvals.abv[i], ,drop = FALSE])
+    all.names.abv[[i]] <- names.sd.abv
+  }
+  
+  for (j in 1:length(sdvals.bel)) {
+    names.sd.bel <- rownames(matrix[matrix[, j] < sdvals.bel[j], ,drop = FALSE])
+    all.names.bel[[j]] <- names.sd.bel
+  }
+  
+  common.abv <- Reduce(intersect, all.names.abv)
+  common.bel <- Reduce(intersect, all.names.bel)
+  
+  return(list(common.abv = common.abv, common.bel = common.bel))
+}
 
-#find proportion of dups with cv > 25%
-more.than.25 <- sum(!is.na(cv.mat) & cv.mat > 20)
-more.than.30 <- sum(!is.na(cv.mat) & cv.mat > 30)
-totalnum <- length(!is.na(cv.mat))
-prop.cv.25 <- more.than.25 / totalnum * 100
-prop.cv.30 <- more.than.30 / totalnum * 100
-print(prop.cv.25)
-print(prop.cv.30)
-#51.7% for >25% CV
-#17.4% for >30% CV
+r1.igg.sd <- sd.igg(r1_mfi.log, above_2.5.r1, below_2.5.r1)
+r2.igg.sd <- sd.igg(r2_mfi.log, above_2.5.r2, below_2.5.r2)
 
-###see how it compares to with bare beads subtracted and normalized
-#subtract bare bds and normalize neg vals to 0
+
+matching.r1 <- list(
+  abv = which(rownames(r1_mfi.1) %in% r1.igg.sd$common.abv),
+  bel = which(rownames(r1_mfi.1) %in% r1.igg.sd$common.bel)
+)
+print(matching.r1)
+#replace 189 (i15), 202 (j6)
+
+matching.r2 <- list(
+  abv = which(rownames(r1_mfi.2) %in% r2.igg.sd$common.abv),
+  bel = which(rownames(r2_mfi.2) %in% r2.igg.sd$common.bel)
+)
+print(matching.r2)
+#replace 159 (h7), 214 (j18), 236 (k18), 258 (l18)
+
+#replacing low igg r
+
+r1_mfi.2[189, ] <- r2_mfi.2[189, ]
+r1_mfi.2[202, ] <- r2_mfi.2[202, ]
+#r1_mfi.3[209, ] <- r2_mfi.3[209, ]
+r2_mfi.2[159, ] <- r1_mfi.2[159, ]
+r2_mfi.2[214, ] <- r1_mfi.2[214, ]
+r2_mfi.2[236, ] <- r1_mfi.2[236, ]
+#r2_mfi.3[253, ] <- r1_mfi.3[253, ]
+r2_mfi.2[258, ] <- r1_mfi.2[258, ]
+
+
+ag.list.1 <- c(
+  "IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Ganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","CCL3","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
+)
+
+#subtract bb
+
 normbb <- function(matrix) {
-  bb.pos <- which(colnames(matrix) == "Bare.Bead") #fetches column index that has the title "Bare.bead"
+  bb.pos <- which(colnames(matrix) == "Bare Bead") #fetches column index that has the title "Bare.bead"
   matrix.sub <- sweep(matrix, 1, matrix[,bb.pos], "-")
   matrix.rem <- matrix.sub[,-1]
   matrix.rem[matrix.rem < 0] <- 0
   return(matrix.rem)
 }
 
-r1_mfi.2 <- normbb(r1_mfi.1)
-r2_mfi.2 <- normbb(r2_mfi.1)
+r1_mfi.3 <- normbb(r1_mfi.2)
+r2_mfi.3 <- normbb(r2_mfi.2)
 
-cv.mat.1 <- cvmatrix(r1_mfi.2,r2_mfi.2)
-
-#calculate avg %CV of everything in the matrix
-avgcv.1 <- mean(cv.mat.1, na.rm = TRUE)
-print(avgcv.1)
-#36%
-
-#find proportion of dups with cv > 25%
-more.than.25.1 <- sum(!is.na(cv.mat.1) & cv.mat.1 > 20)
-more.than.30.1 <- sum(!is.na(cv.mat.1) & cv.mat.1 > 30)
-totalnum.1 <- length(!is.na(cv.mat.1))
-prop.cv.25.1 <- more.than.25.1 / totalnum.1 * 100
-prop.cv.30.1 <- more.than.30.1 / totalnum.1 * 100
-print(prop.cv.25.1)
-print(prop.cv.30.1)
-#67.9% for >25%
-#43.6% for >30%
-
-
-###how about if we exclude <1000
-r1_mfi.3 <- r1_mfi.1
-r1_mfi.3[r1_mfi.3 < 1000] <- NA
-r2_mfi.3 <- r2_mfi.1
-r2_mfi.3[r2_mfi.3 < 1000] <- NA
-
-cv.mat.3 <- cvmatrix(r1_mfi.3, r2_mfi.3)
-
-#calculate avg %CV of everything in the matrix
-avgcv.3 <- mean(cv.mat.3, na.rm = TRUE)
-print(avgcv.3)
-#18.3%
-
-#find proportion of dups with cv > 25%
-more.than.25.3 <- sum(!is.na(cv.mat.3) & cv.mat.3 > 20)
-more.than.30.3 <- sum(!is.na(cv.mat.3) & cv.mat.3 > 30)
-totalnum.3 <- length(!is.na(cv.mat.3))
-prop.cv.25.3 <- more.than.25.3 / totalnum.3 * 100
-prop.cv.30.3 <- more.than.30.3 / totalnum.3 * 100
-print(prop.cv.25.3)
-print(prop.cv.30.3)
-#9.5% for >25%
-#2.7% for >25%
-
-##how about <1000 excluded & bb normed
-r1_mfi.4 <- r1_mfi.2
-r1_mfi.4[r1_mfi.4 < 1000] <- NA
-r2_mfi.4 <- r2_mfi.2
-r2_mfi.4[r2_mfi.4 < 1000] <- NA
-
-cv.mat.4 <- cvmatrix(r1_mfi.4,r2_mfi.4)
-
-#calculate avg %CV of everything in the matrix
-avgcv.4 <- mean(cv.mat.4, na.rm = TRUE)
-print(avgcv.4)
-#17.8%
-
-#find proportion of dups with cv > 25%
-more.than.25.4 <- sum(!is.na(cv.mat.4) & cv.mat.4 > 20)
-more.than.30.4 <- sum(!is.na(cv.mat.4) & cv.mat.4 > 30)
-totalnum.4 <- length(!is.na(cv.mat.4))
-prop.cv.25.4 <- more.than.25.4 / totalnum.4 * 100
-prop.cv.30.4 <- more.than.30.4 / totalnum.4 * 100
-print(prop.cv.25.4)
-print(prop.cv.30.4)
-#4.6% for >25%
-#1.7% for >30%
-
-# Find indices where CV are greater than 20 and their corresponding mfis
-indices_above_20 <- which(cv.mat.4 > 20, arr.ind = TRUE)
-
-values <- numeric() #stores decimals
-mfis.1 <- integer() #for computing efficiency purposes we are just going to store the whole numbers and truncate the MFI decimals
-mfis.2 <- integer()
-
-for (i in 1:nrow(indices_above_20)) {
-  row_index <- indices_above_20[i, 1] #pull row index of cv>20
-  col_index <- indices_above_20[i, 2] #same but for col
-  cv <- cv.mat.4[row_index, col_index] #pull out the cv values >20
-  mfi.1 <- r1_mfi.4[row_index, col_index] #pull out mfi vals for cv>20
-  mfi.2 <- r2_mfi.4[row_index, col_index]
-  values <- c(values, cv)
-  mfis.1 <- c(mfis.1, mfi.1) #append to vector
-  mfis.2 <- c(mfis.2, mfi.2)
-}
-
-indices_above_20 <- cbind(indices_above_20, values, mfis.1, mfis.2)
-view(indices_above_20)
-
-# Calculate row-wise CV averages to summarize %CV for each Ag
-col_averages <- colMeans(cv.mat.4, na.rm=T)
-col_averages <- as.data.frame(col_averages)
-non.na.ct <- nrow(cv.mat.4) - colSums(is.na(cv.mat.4))
-col_averages$ct <- non.na.ct
-# Print the row-wise averages
-view(col_averages)
-
-write.csv(col_averages, "percent_cv_per_ag_NA_removed-xy.csv")
-
-#update ag list (remove bare beads)
-ag.list <- c(
-  "IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Lysomonoganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","MIP-1alpha (CCL3)","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP BB'","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
-)
-ag.list <- as.factor(ag.list) #converts character vector to factor so that levels can be rearranged
-ag.list <- factor(ag.list, levels = c(
-  "IL-1A","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","Intrinsic Factor","MPO","U11/U12 RNP","Eotaxin","Eotaxin 2","CX3CL1","IL-1B","CCL8","OSM","CXCL12","VEGFA","CXCL1","CXCL7","LRP11","Beta-tubulin","Lysomonoganglioside-GM1","U1-snRNP A","PDC-E2","TPO","TG","CXCL10","CXCL9","MIP-1alpha (CCL3)","CXCL13","CXCL16","CXCL5","CCL21","CXCL8","CCL22","CCL19","CCL25","CXCL17","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFB","TNF-alpha","IL1RA","ACE2","Proteinase 3","BPI","Ro52","Ro60","La/SSB","U1-snRNP BB'","U1-snRNP C","Ribo P0","Ribo P1","Ribo P2","IFN-lambda3","IL-33","CENP A","Scl-70","Fibrillarin","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","OJ","PL-7","PL-12","CCL26"
-))
-
-
-#back to main data preprocessing
-colnames(r1_mfi.2) <- ag.list
-colnames(r2_mfi.2) <- ag.list
+r1_mfi.4 <- r1_mfi.3[, -c(1:4)]
+r2_mfi.4 <- r2_mfi.3[, -c(1:4)]
 
 #average data for final matrix
-avg.mfi <- (r1_mfi.2 + r2_mfi.2) / 2
+avg.mfi <- (r1_mfi.4 + r2_mfi.4) / 2
 
+#avg.mfi <- avg.mfi[,-72]
+colnames(avg.mfi) <- ag.list.1
+rownames(avg.mfi) <- sample.list
+na_indexes <- which(rownames(avg.mfi) %in% c("P_NA", "P_NA2", "HC_NA"))
+avg.mfi <- avg.mfi[-na_indexes,]
+
+sample.updated <- rownames(avg.mfi)
 pans <- as.data.frame(avg.mfi)
 
 #append all columns to a single column
@@ -267,31 +239,19 @@ pans <- stack(pans)
 names(pans)[names(pans) == "ind"] <- "Ag"
 names(pans)[names(pans) == "values"] <- "MFI"
 
-sample.list <- c(
-  "126-0004-01","126-0022-01","126-0006-02","126-0057-01","126-0023-02","126-0099-01","126-0032-02","126-0105-01","126-0035-02","126-0115-01","126-0060-01","126-0120-01","126-0063-01","126-0130-01","126-0067-01","126-0154-02","126-0071-02","126-0156-01","126-0080-01","126-0161-02","126-0093-01","77-0001-02","126-0093-04","77-0013-06","126-0097-01","77-0014-01","126-0110-04","77-0014-08","126-0117-01","77-0048-16","126-0147-01","77-0090-02","126-0147-03","77-0091-07","126-0149-01","77-0107-04","126-0165-01","77-0120-02","77-0006-13","77-0120-28","77-0028-09","77-0153-06","77-0039-20","77-0153-11","77-0047-38","77-0157-01","77-0069-03","77-0183-01","77-0071-10","77-0183-81","77-0096-03","77-0185-01","77-0140-02","77-0205-05","77-0146-01","77-0371-02","77-0147-12","77-0206-42","77-0150-02","77-0214-01","77-0160-05","77-0219-45","77-0166-05","77-0226-01","77-0186-01","77-0233-03","77-0196-01","77-0244-01","77-0198-06","77-0268-05","77-0198-36","77-0269-91","77-0227-05","77-0277-01","77-0231-01","77-0280-25","77-0251-03","77-0301-40","77-0251-46","77-0328-58","77-0252-81","77-0343-03","77-0270-01","77-0346-01","77-0275-35","77-0355-02","77-0293-19","77-0363-02","77-0300-01","77-0363-23","77-0353-06","77-0364-02","77-0373-01","77-0397-01","77-0393-01","77-0206-03","77-0393-02","77-0401-01","77-0398-01","77-0403-01","77-0402-01","77-0403-17","77-0419-07","77-0412-01","77-0464-01","77-0445-01","77-0491-01","77-0489-01","77-0499-01","77-1013-01","77-1000-02","111-0012-01","77-1027-01","111-0017-01","111-0013-01","111-0019-01","111-0028-01","111-0039-01","111-0029-01","111-0041-01","111-0047-01","111-0042-02","111-0060-01","111-0069-03","111-0502-01","111-0080-03","111-0506-01","111-0524-01","111-0507-01","111-0547-01","111-0508-01","111-0553-01","111-0532-01","111-0562-01","111-0545-01",
-  "111-0582-01","111-0552-01","111-0632-01","111-0554-01","111-0641-01","111-0594-01","111-0675-01","111-0653-01","111-0742-01","111-0654-01","111-0751-01","111-0702-01","111-0769-01","111-0710-04","126-0043-01","111-0752-01","126-0077-01","111-0770-01","126-0083-01","126-0001-01","126-0002-01","126-0017-03","126-0005-01","126-0027-02","126-0020-01","126-0029-01","126-0024-01","126-0047-01","126-0030-02","126-0049-01","126-0033-01","126-0053-01","126-0073-01","126-0089-01","126-0085-01","126-0106-01","126-0088-02","126-0113-02","126-0092-01","126-0136-02","126-0108-04","126-0148-01","126-0111-01","126-0152-01","126-0119-01","126-0155-01","126-0172-01","126-0170-01","77-0008-05","77-0007-03","77-0009-01","77-0007-29","77-0032-01","77-0010-01","77-0068-01","77-0010-02","77-0068-11","77-0016-01","77-0092-04","77-0016-06","77-0102-04","77-0019-01","77-0103-04","77-0040-02","77-0127-02","77-0040-09","77-0143-01","77-0041-01","77-0148-03","77-0042-03","77-0148-10","77-0067-37","77-0158-02","77-0076-01","77-0162-02","77-0079-06","77-0171-02","77-0085-04","77-0172-03","77-0095-01","77-0178-02","77-0097-01","77-0178-13","77-0152-06","77-0181-02","77-0155-01","77-0189-01","77-0170-02","77-0193-01","77-0170-18","77-0211-02","77-0207-07","77-0218-01","77-0207-37","77-0218-33","77-0208-01","77-0228-02","77-0208-13","77-0229-03","77-0235-01","77-0237-03","77-0241-07","77-0239-01","77-0241-21","77-0257-78","77-0311-34","77-0261-56","77-0312-24","77-0282-16","77-0317-13","77-0282-31","77-0338-01","77-0286-14","77-0354-01","77-0304-52","77-0362-07","77-0324-32","77-0362-15","77-0324-37","77-0370-05","77-0347-05","77-0390-01","77-0365-01","77-0409-07","77-0365-06","77-0421-01","77-0380-03","77-0422-02","77-0387-01","77-0456-02","77-0391-01","77-0482-01","77-0411-01","77-0483-01","77-1006-01","77-1020-01",
-  "77-1014-01","111-0002-02","111-0020-01","111-0022-01","111-0023-01","111-0046-02","111-0024-01","111-0504-01","111-0035-01","111-0568-01","111-0038-01","111-0634-02","111-0510-01","111-0636-01","111-0514-01","111-0640-02","111-0515-01","111-0648-02","111-0549-01","111-0652-01","111-0551-01","111-0666-02","111-0580-01","111-0669-01","111-0589-01","111-0684-01","111-0604-01","111-0685-01","111-0608-01","111-0708-01","111-0651-01","111-0728-01","111-0658-01","111-0734-01","111-0703-01","111-0738-01","111-0718-01","111-0740-01","111-0729-01","111-0768-01","111-0745-01","126-0026-01","111-0753-01","HCT","HIS","HTG","HMS","HRN","HAS","HSC","MM","HC123"
-)
+pans$Sample <- sample.updated
 
-cat.list <- c(
-  "PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","HC","PANS",
-  "HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS",
-  "PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","PANS","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","HC","PC","PC","PC","PC","PC","PC","PC","PC","NC"
-)
+sort <- read.csv("REORDERED.csv", stringsAsFactors = F, encoding="UTF-8") #input desired sample order (ordered by sample grouping & alphabetically)
+ag.sort <- read.csv("ag.sort.csv", stringsAsFactors = F, encoding="UTF-8")
 
-pans$Sample <- sample.list
-pans$Cat <- cat.list
+pans$Ag <- factor(pans$Ag, levels = ag.sort$Ag)
+pans$Sample <- factor(pans$Sample, levels = sort$Sample)
 
-ag.order <- c(
-  "IL-1A","IL-1B","IL-2","IL-4","IL-6","IL-7","IL-11","IL-15","IL-17A","IL-17F","IL-21","IL-22","IL-23","IL-33","IL1RA","CXCL1","CXCL5","CXCL7","CXCL8","CXCL9","CXCL10","CXCL12","CXCL13","CXCL16","CXCL17","MIP-1alpha (CCL3)","CCL8","CCL19","CCL21","CCL22","CCL25","CCL26","CX3CL1","IFN-alpha1","IFN-alpha2","IFN-alpha6","IFN-alpha7","IFN-alpha8","IFN-alpha10","IFN-beta","IFN-epsilon","IFN-omega","IFN-gamma","IFN-lambda1","IFN-lambda2","IFN-lambda3","Eotaxin","Eotaxin 2","OSM","C3","C1q","FGF7","GM-CSF","LIF","PDGFBB","VEGFA","VEGFB","TNF-alpha","ACE2","BPI","Proteinase 3","Intrinsic Factor","TPO","TG","CENP A","Scl-70","Fibrillarin","OJ","PL-7","PL-12","PM/Scl-75","MDA5","EJ","Jo-1","SRP54","Ro52","Ro60","La/SSB","U1-snRNP A","U1-snRNP BB'","U1-snRNP C","U11/U12 RNP","Ribo P0","Ribo P1","Ribo P2","LRP11","Beta-tubulin","Lysomonoganglioside-GM1","MPO","PDC-E2"
-)
+pans.1 <- pans %>% arrange(Ag, Sample)
 
-pans$Ag <- factor(pans$Ag, levels = ag.order)
-pans$Cat <- factor(pans$Cat, levels = c("PANS", "HC", "PC", "NC"))
-pans <- pans[order(pans$Ag, pans$Cat, pans$Sample), ]
-pans$Sample <- factor(pans$Sample, levels = c("126-0001-01","126-0002-01","126-0004-01","126-0005-01","126-0006-02","126-0017-03","126-0020-01","126-0022-01","126-0023-02","126-0024-01","126-0027-02","126-0029-01","126-0030-02","126-0032-02","126-0033-01","126-0035-02","126-0047-01","126-0049-01","126-0053-01","126-0057-01","126-0060-01","126-0063-01","126-0067-01","126-0071-02","126-0073-01","126-0080-01","126-0085-01","126-0088-02","126-0089-01","126-0092-01","126-0093-01","126-0093-04","126-0097-01","126-0099-01","126-0105-01","126-0106-01","126-0108-04","126-0110-04","126-0111-01","126-0113-02","126-0115-01","126-0117-01","126-0119-01","126-0120-01","126-0130-01","126-0136-02","126-0147-01","126-0147-03","126-0148-01","126-0149-01","126-0152-01","126-0154-02","126-0155-01","126-0156-01","126-0161-02","126-0165-01","126-0170-01","126-0172-01","77-0001-02","77-0006-13","77-0007-03","77-0007-29","77-0008-05","77-0009-01","77-0010-01","77-0010-02","77-0013-06","77-0014-01","77-0014-08","77-0016-01","77-0016-06","77-0019-01","77-0028-09","77-0032-01","77-0039-20","77-0040-02","77-0040-09","77-0041-01","77-0042-03","77-0047-38","77-0048-16","77-0067-37","77-0068-01","77-0068-11","77-0069-03","77-0071-10","77-0076-01","77-0079-06","77-0085-04","77-0090-02","77-0091-07","77-0092-04","77-0095-01","77-0096-03","77-0097-01","77-0102-04","77-0103-04","77-0107-04","77-0120-02","77-0120-28","77-0127-02","77-0140-02","77-0143-01","77-0146-01","77-0147-12","77-0148-03","77-0148-10",
-                                              "77-0150-02","77-0152-06","77-0153-06","77-0153-11","77-0155-01","77-0157-01","77-0158-02","77-0160-05","77-0162-02","77-0166-05","77-0170-02","77-0170-18","77-0171-02","77-0172-03","77-0178-02","77-0178-13","77-0181-02","77-0183-01","77-0183-81","77-0185-01","77-0186-01","77-0189-01","77-0193-01","77-0196-01","77-0198-06","77-0198-36","77-0205-05","77-0206-03","77-0206-42","77-0207-07","77-0207-37","77-0208-01","77-0208-13","77-0211-02","77-0214-01","77-0218-01","77-0218-33","77-0219-45","77-0226-01","77-0227-05","77-0228-02","77-0229-03","77-0231-01","77-0233-03","77-0235-01","77-0237-03","77-0239-01","77-0241-07","77-0241-21","77-0244-01","77-0251-03","77-0251-46","77-0252-81","77-0257-78","77-0261-56","77-0268-05","77-0269-91","77-0270-01","77-0275-35","77-0277-01","77-0280-25","77-0282-16","77-0282-31","77-0286-14","77-0293-19","77-0300-01","77-0301-40","77-0304-52","77-0311-34","77-0312-24","77-0317-13","77-0324-32","77-0324-37","77-0328-58","77-0338-01","77-0343-03","77-0346-01","77-0347-05","77-0353-06","77-0354-01","77-0355-02","77-0362-07","77-0362-15","77-0363-02","77-0363-23","77-0364-02","77-0365-01","77-0365-06","77-0370-05","77-0371-02","77-0373-01","77-0380-03","77-0387-01","77-0390-01","77-0391-01","77-0393-01","77-0393-02","77-0397-01","77-0398-01","77-0401-01","77-0402-01","77-0403-01","77-0403-17","77-0409-07","77-0411-01","77-0412-01","77-0419-07","77-0421-01","77-0422-02","77-0445-01","77-0456-02","77-0464-01",
-                                              "77-0482-01","77-0483-01","77-0489-01","77-0491-01","77-0499-01","77-1000-02","77-1006-01","77-1013-01","77-1014-01","77-1020-01","77-1027-01","111-0002-02","111-0012-01","111-0013-01","111-0017-01","111-0019-01","111-0020-01","111-0022-01","111-0023-01","111-0024-01","111-0028-01","111-0029-01","111-0035-01","111-0038-01","111-0039-01","111-0041-01","111-0042-02","111-0046-02","111-0047-01","111-0060-01","111-0069-03","111-0080-03","111-0502-01","111-0504-01","111-0506-01","111-0507-01","111-0508-01","111-0510-01","111-0514-01","111-0515-01","111-0524-01","111-0532-01","111-0545-01","111-0547-01","111-0549-01","111-0551-01","111-0552-01","111-0553-01","111-0554-01","111-0562-01","111-0568-01","111-0580-01","111-0582-01","111-0589-01","111-0594-01","111-0604-01","111-0608-01","111-0632-01","111-0634-02","111-0636-01","111-0640-02","111-0641-01","111-0648-02","111-0651-01","111-0652-01","111-0653-01","111-0654-01","111-0658-01","111-0666-02","111-0669-01","111-0675-01","111-0684-01","111-0685-01","111-0702-01","111-0703-01","111-0708-01","111-0710-04","111-0718-01","111-0728-01","111-0729-01","111-0734-01","111-0738-01","111-0740-01","111-0742-01","111-0745-01","111-0751-01","111-0752-01","111-0753-01","111-0768-01","111-0769-01","111-0770-01","126-0026-01","126-0043-01","126-0077-01","126-0083-01","HAS","HCT","HIS","HMS","HRN","HSC","HTG","MM","HC123"))
+pans.1$Cat <- sort$Cat
+
+#write.csv(pans.1, "pans test1.csv")
 
 #MFI heatmap
 p <- ggplot(pans, aes(x = Sample, y=Ag)) + 
@@ -325,7 +285,12 @@ p #40*100
 panslist <- c("PANS","HC")
 
 #only include pans and hc
-pans.only <- filter(pans, Cat %in% panslist)
+pans.only <- filter(pans.1, Cat %in% panslist)
+#ifnl.list <- c("IFN-lambda1","IFN-lambda2","IFN-lambda3")
+#pans.ifnl <- filter(pans, Ag %in% ifnl.list)
+
+#library(openxlsx)
+#write.xlsx(pans.ifnl, file = "ifnl_test.xlsx")
 
 #calculate sd in a new dataframe pans.sd
 pans.sd <- pans.only %>% 
@@ -335,7 +300,7 @@ pans.sd <- pans.only %>%
             count = n()) 
 
 #multiply sd x 3 + mean
-pans.sd$threesd <- pans.sd$sd*3 + pans.sd$mean
+pans.sd$threesd <- pans.sd$sd*5 + pans.sd$mean
 
 #to only keep the 3sd+mean value for HC
 tsd <- c("HC")
@@ -344,25 +309,20 @@ pans.sd <- pans.sd %>%
   filter(Cat == tsd) 
 
 #MAKE SURE pans.sd and pans.only are in same order
-pans.sd$Ag <- factor(pans.sd$Ag, levels = ag.order)
-pans.only$Ag <- factor(pans.only$Ag, levels = ag.order)
+pans.sd$Ag <- factor(pans.sd$Ag, levels = ag.sort$Ag)
+pans.only$Ag <- factor(pans.only$Ag, levels = ag.sort$Ag)
 
 #multiply each row x (n of samples) so that it can be the same length as pans.only for appending
-pans.sd <- pans.sd[rep(seq_len(nrow(pans.sd)), each = 314), ]
+pans.sd <- pans.sd[rep(seq_len(nrow(pans.sd)), each = 311), ]
 
 #append the 5sd+mean in dfp to df so we can compare raw MFI with 5sd+mean values
 pans.only$tsd <- pans.sd$threesd
 
 #compare the fsd col with MFI col and append if > or < 3SD to new column
-pans.only$sdcompare <- ifelse(pans.only$tsd < pans.only$MFI & pans.only$MFI >= 3000, "> 3 SD",
-                       ifelse(pans.only$tsd > pans.only$MFI, "< 3 SD", "< 3 SD"))
-pal <- c("< 3 SD" = "black", "> 3 SD" = "red")
-
-#reorder samples
-pans.only$Sample <- factor(pans.only$Sample, levels = c("126-0001-01","126-0002-01","126-0004-01","126-0005-01","126-0006-02","126-0017-03","126-0020-01","126-0022-01","126-0023-02","126-0024-01","126-0027-02","126-0029-01","126-0030-02","126-0032-02","126-0033-01","126-0035-02","126-0047-01","126-0049-01","126-0053-01","126-0057-01","126-0060-01","126-0063-01","126-0067-01","126-0071-02","126-0073-01","126-0080-01","126-0085-01","126-0088-02","126-0089-01","126-0092-01","126-0093-01","126-0093-04","126-0097-01","126-0099-01","126-0105-01","126-0106-01","126-0108-04","126-0110-04","126-0111-01","126-0113-02","126-0115-01","126-0117-01","126-0119-01","126-0120-01","126-0130-01","126-0136-02","126-0147-01","126-0147-03","126-0148-01","126-0149-01","126-0152-01","126-0154-02","126-0155-01","126-0156-01","126-0161-02","126-0165-01","126-0170-01","126-0172-01","77-0001-02","77-0006-13","77-0007-03","77-0007-29","77-0008-05","77-0009-01","77-0010-01","77-0010-02","77-0013-06","77-0014-01","77-0014-08","77-0016-01","77-0016-06","77-0019-01","77-0028-09","77-0032-01","77-0039-20","77-0040-02","77-0040-09","77-0041-01","77-0042-03","77-0047-38","77-0048-16","77-0067-37","77-0068-01","77-0068-11","77-0069-03","77-0071-10","77-0076-01","77-0079-06","77-0085-04","77-0090-02","77-0091-07","77-0092-04","77-0095-01","77-0096-03","77-0097-01","77-0102-04","77-0103-04","77-0107-04","77-0120-02","77-0120-28","77-0127-02","77-0140-02","77-0143-01","77-0146-01","77-0147-12","77-0148-03","77-0148-10",
-                                              "77-0150-02","77-0152-06","77-0153-06","77-0153-11","77-0155-01","77-0157-01","77-0158-02","77-0160-05","77-0162-02","77-0166-05","77-0170-02","77-0170-18","77-0171-02","77-0172-03","77-0178-02","77-0178-13","77-0181-02","77-0183-01","77-0183-81","77-0185-01","77-0186-01","77-0189-01","77-0193-01","77-0196-01","77-0198-06","77-0198-36","77-0205-05","77-0206-03","77-0206-42","77-0207-07","77-0207-37","77-0208-01","77-0208-13","77-0211-02","77-0214-01","77-0218-01","77-0218-33","77-0219-45","77-0226-01","77-0227-05","77-0228-02","77-0229-03","77-0231-01","77-0233-03","77-0235-01","77-0237-03","77-0239-01","77-0241-07","77-0241-21","77-0244-01","77-0251-03","77-0251-46","77-0252-81","77-0257-78","77-0261-56","77-0268-05","77-0269-91","77-0270-01","77-0275-35","77-0277-01","77-0280-25","77-0282-16","77-0282-31","77-0286-14","77-0293-19","77-0300-01","77-0301-40","77-0304-52","77-0311-34","77-0312-24","77-0317-13","77-0324-32","77-0324-37","77-0328-58","77-0338-01","77-0343-03","77-0346-01","77-0347-05","77-0353-06","77-0354-01","77-0355-02","77-0362-07","77-0362-15","77-0363-02","77-0363-23","77-0364-02","77-0365-01","77-0365-06","77-0370-05","77-0371-02","77-0373-01","77-0380-03","77-0387-01","77-0390-01","77-0391-01","77-0393-01","77-0393-02","77-0397-01","77-0398-01","77-0401-01","77-0402-01","77-0403-01","77-0403-17","77-0409-07","77-0411-01","77-0412-01","77-0419-07","77-0421-01","77-0422-02","77-0445-01","77-0456-02","77-0464-01",
-                                              "77-0482-01","77-0483-01","77-0489-01","77-0491-01","77-0499-01","77-1000-02","77-1006-01","77-1013-01","77-1014-01","77-1020-01","77-1027-01","111-0002-02","111-0012-01","111-0013-01","111-0017-01","111-0019-01","111-0020-01","111-0022-01","111-0023-01","111-0024-01","111-0028-01","111-0029-01","111-0035-01","111-0038-01","111-0039-01","111-0041-01","111-0042-02","111-0046-02","111-0047-01","111-0060-01","111-0069-03","111-0080-03","111-0502-01","111-0504-01","111-0506-01","111-0507-01","111-0508-01","111-0510-01","111-0514-01","111-0515-01","111-0524-01","111-0532-01","111-0545-01","111-0547-01","111-0549-01","111-0551-01","111-0552-01","111-0553-01","111-0554-01","111-0562-01","111-0568-01","111-0580-01","111-0582-01","111-0589-01","111-0594-01","111-0604-01","111-0608-01","111-0632-01","111-0634-02","111-0636-01","111-0640-02","111-0641-01","111-0648-02","111-0651-01","111-0652-01","111-0653-01","111-0654-01","111-0658-01","111-0666-02","111-0669-01","111-0675-01","111-0684-01","111-0685-01","111-0702-01","111-0703-01","111-0708-01","111-0710-04","111-0718-01","111-0728-01","111-0729-01","111-0734-01","111-0738-01","111-0740-01","111-0742-01","111-0745-01","111-0751-01","111-0752-01","111-0753-01","111-0768-01","111-0769-01","111-0770-01","126-0026-01","126-0043-01","126-0077-01","126-0083-01","HAS","HCT","HIS","HMS","HRN","HSC","HTG","MM","HC123"))
-
+pans.only$sdcompare <- ifelse(pans.only$tsd < pans.only$MFI & pans.only$MFI >= 3000,
+                              "> 5 SD",
+                       ifelse(pans.only$tsd > pans.only$MFI, "< 5 SD", "< 5 SD"))
+pal <- c("< 5 SD" = "black", "> 5 SD" = "red")
 
 sd <- ggplot(pans.only, aes(x=Sample, y=Ag)) +
   geom_tile(aes(fill=sdcompare)) +
@@ -388,6 +348,172 @@ sd <- ggplot(pans.only, aes(x=Sample, y=Ag)) +
   scale_fill_discrete(type = pal) 
 sd
 
+#add in demo data
+demo <- read.csv("9.26.23 PANS demo.csv", stringsAsFactors = F, encoding="UTF-8")
+demo <- as.data.frame(demo)
+pans.demo <- cbind(pans.only, demo[rep_len(seq_len(nrow(demo)), length.out = nrow(pans.only)), ])
+
+pans.demo.1 <- pans.demo %>%
+  mutate(Demographics_White = as.numeric(Demographics == "White"),
+         Demographics_Asian = as.numeric(Demographics == "Asian"),
+         Demographics_Multiracial = as.numeric(Demographics == "Multiracial_or_Other"),
+         Demographics_Hispanic = as.numeric(Demographics == "Hispanic_or_Latino"),
+         Sex_Female = as.numeric(Sex == "Female"),
+         Sex_Male = as.numeric(Sex == "Male")
+  )
+
+# List of antigen names
+antigens <- unique(pans.demo.1$Ag)
+
+# Initialize a list to store regression models
+models <- list()
+
+# Loop through each antigen
+for (antigen in antigens) {
+  subset_data <- subset(pans.demo.1, Ag == antigen)
+  formula <- formula(paste("MFI ~ Age + Demographics_White + Demographics_Asian + Demographics_Multiracial + Demographics_Hispanic + Sex_Female"))
+  model <- lm(formula, data = subset_data)
+  
+  # Store the model in the list
+  models[[antigen]] <- model
+}
+
+# Open a PDF file for output
+pdf("diagnostic_plots.1.pdf")
+
+# Loop through each antigen
+for (antigen in antigens) {
+  # Subset the data for the current antigen
+  subset_data <- subset(pans.demo.1, Ag == antigen)
+  
+  # Retrieve the corresponding linear regression model
+  model <- models[[antigen]]
+  
+  # Predicted values
+  predicted_values <- predict(model)
+  
+  # Combine data into a data frame, handling missing values
+  plot_data <- data.frame(
+    Observed = subset_data$MFI[!is.na(predicted_values)],
+    Predicted = predicted_values[!is.na(predicted_values)],
+    Residuals = residuals(model)[!is.na(predicted_values)]
+  )
+  
+  # Check if there is enough data for the plot
+  if (nrow(plot_data) < 3) {
+    cat("Not enough data for plot for antigen:", antigen, "\n")
+    next  # Skip to the next iteration if there's not enough data
+  }
+  
+  # Scatterplot of observed vs. predicted values
+  scatterplot <- ggplot(plot_data, aes(x = Observed, y = Predicted)) +
+    geom_point() +
+    ggtitle(paste("Observed vs. Predicted for", antigen))
+  
+  # Residuals vs. fitted values plot
+  residuals_plot <- ggplot(plot_data, aes(x = Predicted, y = Residuals)) +
+    geom_point() +
+    ggtitle(paste("Residuals vs. Fitted for", antigen))
+  
+  # Histogram of residuals
+  residuals_histogram <- ggplot(plot_data, aes(x = Residuals)) +
+    geom_histogram(binwidth = 1) +
+    ggtitle(paste("Histogram of Residuals for", antigen))
+  
+  # Save plots in the PDF file
+  print(scatterplot)
+  print(residuals_plot)
+  print(residuals_histogram)
+}
+
+# Close the PDF file
+dev.off()
+
+#multiple regression might not be a good idea - most samples are low (positive skew), and in the context of pans, 
+#data is more susceptible to outliers
+
+#can compare tukey or huber, with and without log transform
+library(MASS)
+library(robustbase)
+
+#regression, no log
+h.models <- list()
+
+# Loop through each antigen
+for (antigen in antigens) {
+  subset_data <- subset(pans.demo.1, Ag == antigen)
+
+  if (any(is.na(subset_data$MFI))) {
+    cat("Skipping antigen", antigen, "due to missing MFI values.\n")
+    next
+  }
+  formula <- formula(paste("MFI ~ Age + Demographics_White + Demographics_Asian + Demographics_Multiracial + Demographics_Hispanic + Sex_Female"))
+  h.model <- lmrob(formula, data = subset_data, control = lmrob.control(maxit.scale = 500, init = "random"))
+  
+  # Store the model in the list
+  h.models[[antigen]] <- h.model
+
+}
+
+# Filter the data for TSD == ">5 SD"
+filtered_data <- pans.only[pans.only$sdcompare == "> 5 SD", ]
+exclude_values <- "NA"
+filtered_data <- subset(filtered_data, !sdcompare %in% exclude_values & !is.na(sdcompare))
+# Initialize a list to store results
+chi_squared_results <- list()
+unique_ags <- unique(filtered_data$Ag)
+
+# Loop through unique Ag values
+for (ag in unique_ags) {
+  # Subset the data for the current Ag
+  ag_data <- filtered_data[filtered_data$Ag == ag, ]
+  
+  # Create a contingency table for PANS and HC
+  contingency_table <- table(ag_data$Cat)
+  
+  # Perform a chi-squared test
+  chi_squared_test <- chisq.test(contingency_table)
+  
+  # Determine which category has a higher count (PANS or HC)
+  if (contingency_table[1] > contingency_table[2]) {
+    chi_squared_test$source_of_significance <- "PANS > HC"
+  } else {
+    chi_squared_test$source_of_significance <- "HC > PANS"
+  }
+  
+  # Store the chi-squared test result in the list
+  chi_squared_results[[ag]] <- chi_squared_test
+}
+
+# Create a data frame to store chi-squared results
+chi_squared_df <- do.call(rbind, lapply(names(chi_squared_results), function(ag) {
+  data.frame(
+    Ag = ag,
+    Source_of_Significance = chi_squared_results[[ag]]$source_of_significance,
+    p_value = chi_squared_results[[ag]]$p.value,
+    stringsAsFactors = FALSE
+  )
+}))
+
+# Filter for significant results (p-value < 0.05, for example)
+significant_results <- chi_squared_df[chi_squared_df$p_value < 0.05, ]
+
+
+# Sort the data frame by p-value (optional)
+chi_squared_df <- chi_squared_df[order(chi_squared_df$p_value), ]
+
+# Extract the p-values and convert to a matrix
+p_values_matrix <- as.matrix(chi_squared_df$p_value)
+rownames(p_values_matrix) <- chi_squared_df$Ag  # Use the Ag column as row names
+
+# Create a bar plot of significant p-values (p < 0.05)
+significant_chi_squared_df <- chi_squared_df[chi_squared_df$p_value < 0.05, ]
+ggplot(significant_chi_squared_df, aes(x = Ag, y = p_value)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Ag", y = "p-value") +
+  theme_minimal()
+
+
 #summarize for each ag, proportion and # of samples that are 3sd above for PANS and HC
 pans.sd.summary <- data.frame()
 
@@ -400,8 +526,8 @@ for (i in seq_along(unique_ag)) {
   subset_ag_pans <- pans.only[pans.only$Ag == ag_val & pans.only$Cat == "PANS", ] #subset samples that are PANS for current Ag iteration
   subset_ag_hc <- pans.only[pans.only$Ag == ag_val & pans.only$Cat == "HC", ] #same as above but for HC
   
-  num_3sd_pans <- sum(subset_ag_pans$sdcompare == "> 3 SD", na.rm=T) #count # of pans samples that are >3sd
-  num_3sd_hc <- sum(subset_ag_hc$sdcompare == "> 3 SD", na.rm=T) #count # of hc samples that are >3sd
+  num_3sd_pans <- sum(subset_ag_pans$sdcompare == "> 5 SD", na.rm=T) #count # of pans samples that are >3sd
+  num_3sd_hc <- sum(subset_ag_hc$sdcompare == "> 5 SD", na.rm=T) #count # of hc samples that are >3sd
   
   total_samples_pans <- sum(!is.na(subset_ag_pans$MFI)) #count total num of pans samples for current ag iteration
   total_samples_hc <- sum(!is.na(subset_ag_hc$MFI)) #count total num of pans samples for current ag iteration
